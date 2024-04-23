@@ -17,3 +17,19 @@ function updateClock() {
   updateClock();
   
   setInterval(updateClock, 1000);
+
+  /* change images*/
+ var myImage = document.querySelector("#galleryImage");
+
+ function changeImage1(params) {
+  myImage.src = "/assets/gallery/image1.jpg";
+  
+}
+ function changeImage2(params) {
+    myImage.src = "/assets/gallery/image2.jpg";
+    
+ }
+ function changeImage3(params) {
+    myImage.src = "/assets/gallery/image3.jpg";
+    
+ }
