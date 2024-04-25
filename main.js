@@ -78,6 +78,8 @@ function updateClock() {
 
 updateGreeting(); // Update greeting when the page loads
 
+ 
+
 // Sample array of image objects
 const images = [
   {
@@ -120,18 +122,16 @@ const images = [
 
 // Function to update the images displayed
 function updateImages(filter) {
-  const productsArea = document.querySelector('.products-area');
+  const productsArea = document.querySelector(".products-area");
   productsArea.innerHTML = ""; // Clear current images
 
   // Determine which images to show based on the filter
-  let filteredImages = [];
-  if (filter === "all") {
-    filteredImages = images;
-  } else if (filter === "paid") {
-    filteredImages = images.filter(image => image.price > 0).slice(0, 2); // Filter and get the first two paid images
-  } else if (filter === "free") {
-    filteredImages = images.filter(image => image.price === 0);
-  }
+  const filteredImages = images.filter((image) => {
+    if (filter === "all") return true;
+    if (filter === "paid" && image.price > 0) return true;
+    if (filter === "free" && image.price === 0) return true;
+    return false;
+  });
 
   // Create and append the new image cards to the products area
   filteredImages.forEach((image) => {
@@ -140,22 +140,21 @@ function updateImages(filter) {
 
     const img = document.createElement("img");
     img.src = image.src;
-    img.alt = image.description;
     imageCard.appendChild(img);
 
     const description = document.createElement("div");
     description.classList.add("description");
-    description.textContent = image.description;
+    description.textContent = `Description: ${image.description}`;
     imageCard.appendChild(description);
 
     const person = document.createElement("div");
     person.classList.add("person");
-    person.textContent = "Person: " + image.person;
+    person.textContent = `Person: ${image.person}`;
     imageCard.appendChild(person);
 
     const price = document.createElement("div");
     price.classList.add("price");
-    price.textContent = "Price: " + image.price + " $";
+    price.textContent = `Price: ${image.price} $`;
     imageCard.appendChild(price);
 
     productsArea.appendChild(imageCard);
@@ -174,5 +173,58 @@ updateImages("all");
 
 
 
- 
 
+
+
+
+const weatherData = {
+    "Westlands": {
+      celsius: {
+        temperature: 20,
+        description: "partly cloudy",
+      },
+      fahr: {
+        temperature: 68,
+        description: "partly cloudy",
+      },
+    },
+    "Westlands": {
+      celsius: {
+        temperature: 25,
+        description: "sunny",
+      },
+      fahr: {
+        temperature: 77,
+        description: "sunny",
+      },
+    },
+  };
+  
+  // Function to convert Celsius to Fahrenheit
+  function celsiusToFahrenheit(celsius) {
+    return (celsius * 9) / 5 + 32;
+  }
+  
+  // Function to update the weather information
+  function updateWeatherInfo(location, temperatureUnit) {
+    const weather = weatherData[location][temperatureUnit];
+    const temp =
+      temperatureUnit === "celsius"
+        ? weather.temperature
+        : celsiusToFahrenheit(weather.temperature);
+    const message = `Today's weather in ${location} is ${weather.description} with a temperature of ${temp}°${temperatureUnit}.`;
+    document.getElementById("weather").innerText = message;
+  }
+  
+  // Add event listeners to temperature buttons
+  document.getElementById("celsius").addEventListener("click", () => {
+    updateWeatherInfo("Westlands", "celsius");
+  });
+  
+  document.getElementById("fahr").addEventListener("click", () => {
+    updateWeatherInfo("Westlands", "fahr");
+  });
+  
+  // Initialize the weather info
+  document.getElementById("fahr").click();
+  
